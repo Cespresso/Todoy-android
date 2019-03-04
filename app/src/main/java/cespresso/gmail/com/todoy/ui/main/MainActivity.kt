@@ -26,9 +26,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        //
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
-
         // Set up Action Bar
         val navController = host.navController
 
@@ -51,11 +51,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        // TODO activityからの遷移はまた別みたい、and drawerlayoutはなんか特別なのがあるみたい？
-//        fab.setOnClickListener {
-//            findNavController(R.id.main_navigation).navigate(R.id.addFragment)
-//            Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_addFragment)
-//        }
+        // Global Actionでの遷移
+        // TODO 現在のtopのfragmentによって表示を出し分ける方法の検討
+        fab.setOnClickListener {
+            navController.navigate(R.id.action_global_addFragment)
+        }
+
     }
 
     override fun onBackPressed() {

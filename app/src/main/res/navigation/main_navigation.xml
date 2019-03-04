@@ -22,4 +22,11 @@
             android:name="cespresso.gmail.com.todoy.ui.main.AddFragment"
             android:label="add_fragment"
             tools:layout="@layout/add_fragment"/>
+    <action android:id="@+id/action_global_addFragment"
+            app:destination="@id/addFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+    />
 </navigation>
