@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1059338935788",
+    "firebase_url": "https://hostingtest-4d77a.firebaseio.com",
+    "project_id": "hostingtest-4d77a",
+    "storage_bucket": "hostingtest-4d77a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059338935788:android:92166107481706a2",
+        "android_client_info": {
+          "package_name": "a2cespresso.gmail.com.checkart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059338935788-6g4apl8oq85dm21v6erg7rsbkvbbs9qo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5zmS_hBaYTXRerSLujijjOLBDLERdsYY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
