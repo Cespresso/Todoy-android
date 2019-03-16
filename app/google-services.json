@@ -8,12 +8,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1059338935788:android:92166107481706a2",
+        "mobilesdk_app_id": "1:1059338935788:android:7e5d4c6b66e7109e",
         "android_client_info": {
-          "package_name": "a2cespresso.gmail.com.checkart"
+          "package_name": "cespresso.gmail.com.todoy"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1059338935788-rc3rl3k41mr5kbpmtfb4d3iuqpl984d9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cespresso.gmail.com.todoy",
+            "certificate_hash": "c72c71d64ff9357cd8cde37d6eb043de34ec1778"
+          }
+        },
+        {
+          "client_id": "1059338935788-6n2gifaa6qu743pcpevt59mmh60giiau.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cespresso.gmail.com.todoy",
+            "certificate_hash": "da2473b8242bb9c9621041e1e80a3dee48d58350"
+          }
+        },
         {
           "client_id": "1059338935788-6g4apl8oq85dm21v6erg7rsbkvbbs9qo.apps.googleusercontent.com",
           "client_type": 3
@@ -29,8 +45,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059338935788-6g4apl8oq85dm21v6erg7rsbkvbbs9qo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

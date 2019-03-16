@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'com.google.gms.google-services'
+
 
 android {
     compileSdkVersion 28
@@ -45,6 +47,11 @@ dependencies {
     // Navigation TODO 変数の置き場所の一元化
     implementation 'android.arch.navigation:navigation-fragment-ktx:' + rootProject.navigationVersion
     implementation 'android.arch.navigation:navigation-ui-ktx:' + rootProject.navigationVersion
+
+    implementation "android.arch.lifecycle:runtime:$rootProject.archLifecycleVersion"
+    implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
+    implementation "android.arch.lifecycle:reactivestreams:$rootProject.archLifecycleVersion"
+    kapt "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
 
     //DI(dagger)
     def dagger_version = "2.21"
