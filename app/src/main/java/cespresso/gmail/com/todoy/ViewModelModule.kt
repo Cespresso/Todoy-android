@@ -1,7 +1,7 @@
 package cespresso.gmail.com.todoy
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import cespresso.gmail.com.todoy.di.ViewModelFactory
 import cespresso.gmail.com.todoy.di.ViewModelKey
 import cespresso.gmail.com.todoy.ui.main.MainActivityViewModel

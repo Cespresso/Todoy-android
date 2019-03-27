@@ -1,14 +1,14 @@
 package cespresso.gmail.com.todoy.ui.main
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.design.widget.NavigationView
-import android.support.v4.app.FragmentManager
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.graphics.drawable.DrawerArrowDrawable
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.navigation.NavigationView
+import androidx.fragment.app.FragmentManager
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -18,11 +18,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
 import android.animation.ObjectAnimator
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import cespresso.gmail.com.todoy.R
@@ -35,7 +36,6 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
-import android.arch.lifecycle.ViewModelProviders
 import android.opengl.Visibility
 import android.view.View
 import android.widget.ImageView
@@ -134,12 +134,19 @@ class MainActivity : AppCompatActivity(),
         }
         // livedataのハンドリング
         viewModel.apply {
-            user.observe(this@MainActivity, Observer { user ->
-                updateNavigationView(user)
+            user.observe(this@MainActivity, Observer<FirebaseAuth> { auth ->
+                auth?.let{
+                    updateNavigationView(auth.currentUser)
+                }
             })
             loginEvent.observe(this@MainActivity, Observer { event ->
                 event?.getContentIfNotHandled()?.let {
                     startLogin()
+                }
+            })
+            makeSnackBarEvent.observe(this@MainActivity, Observer { event->
+                event?.getContentIfNotHandled()?.let{
+                    displaySnackBar(it)
                 }
             })
         }
@@ -149,9 +156,10 @@ class MainActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         checkUserAuth()
+        viewModel.getServerStatusTask()
     }
     private fun checkUserAuth(){
-        viewModel.user.value = FirebaseAuth.getInstance().currentUser
+        viewModel.user.value = FirebaseAuth.getInstance()
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
@@ -165,15 +173,15 @@ class MainActivity : AppCompatActivity(),
                     // Sign in success, update UI with the signed-in user's information
                     displaySnackBar("ログインに成功しました")
                     Log.d("TAG", "signInWithCredential:success");
-                    viewModel.user.value = mAuth.currentUser
+                    viewModel.user.value = mAuth
                     //                    updateNavigationView()
                 } else {
                     // If sign in fails, display a message to the user.
                     displaySnackBar("ログインに失敗しました")
                     Log.w("TAG", "signInWithCredential:failure", task.getException());
-                    viewModel.user.value = mAuth.currentUser
-                }
 
+                }
+                viewModel.user.value = mAuth
             }
 
     }
@@ -185,7 +193,7 @@ class MainActivity : AppCompatActivity(),
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account)
+                firebaseAuthWithGoogle(account!!)
             } catch (e: ApiException) {
                 displaySnackBar("ログインに失敗しました")
                 // Google Sign In failed, update UI appropriately
@@ -220,17 +228,17 @@ class MainActivity : AppCompatActivity(),
         nav_view.setNavigationItemSelectedListener { menuItem->
             when(menuItem.itemId){
 
-//                R.id.menu_logout -> {
-//                    FirebaseAuth.getInstance().signOut()
-//                    val intent = intent
-//                    overridePendingTransition(0, 0)
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-//                    finish()
-//
-//                    overridePendingTransition(0, 0)
-//                    startActivity(intent)
-//
-//                }
+                R.id.menu_logout -> {
+                    viewModel.user.value?.signOut()
+                    val intent = intent
+                    overridePendingTransition(0, 0)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    finish()
+
+                    overridePendingTransition(0, 0)
+                    startActivity(intent)
+
+                }
             }
             false
         }
@@ -244,6 +252,8 @@ class MainActivity : AppCompatActivity(),
         val textViewName = naviHeaderLogin.findViewById<TextView>(R.id.textViewHeaderName)
         val textViewEmail = naviHeaderLogin.findViewById<TextView>(R.id.textViewHeaderEmail)
         val icon = naviHeaderLogin.findViewById<ImageView>(R.id.imageViewHeaderIcon)
+
+        val logoutButton = nav_view.menu.findItem(R.id.menu_logout)
         if(user!=null){
             naviHeaderLogin.visibility = View.VISIBLE
             textViewEmail.text = user.email
@@ -251,9 +261,16 @@ class MainActivity : AppCompatActivity(),
 
             textViewName.text = user.displayName
             naviHeaderLogout.visibility = View.INVISIBLE
+
+            logoutButton.isEnabled = true
+
+            fab.show()
         }else{
             naviHeaderLogin.visibility = View.INVISIBLE
             naviHeaderLogout.visibility = View.VISIBLE
+            logoutButton.isEnabled = false
+
+            fab.hide()
         }
     }
 }

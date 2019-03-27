@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="cespresso.gmail.com.todoy">
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
             android:name = ".MyApplication"
@@ -9,6 +11,8 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
+            tools:replace="android:appComponentFactory"
+            android:appComponentFactory="whateverString"
             android:theme="@style/AppTheme">
         <activity
                 android:name=".ui.main.MainActivity"
