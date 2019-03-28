@@ -5,11 +5,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <include layout="@layout/common_loading"
-             android:id="@+id/home_loading"/>
+
     <include layout="@layout/home_fragment_todo_list"
              android:id="@+id/home_todo_list"/>
-    <include layout="@layout/home_fragment_login"
-             android:id="@+id/home_login"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
