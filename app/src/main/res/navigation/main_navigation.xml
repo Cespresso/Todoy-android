@@ -8,7 +8,7 @@
     <fragment
             android:id="@+id/mainFragment"
             android:name="cespresso.gmail.com.todoy.ui.main.HomeFragment"
-            android:label="MainFragment">
+            android:label="Home">
         <action
                 android:id="@+id/action_mainFragment_to_addFragment"
                 app:destination="@id/addFragment"
@@ -16,12 +16,15 @@
                 app:exitAnim="@anim/nav_default_exit_anim"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim"
                 app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action android:id="@+id/action_mainFragment_to_showFragment" app:destination="@id/showFragment"
+                app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <fragment
             android:id="@+id/addFragment"
             android:name="cespresso.gmail.com.todoy.ui.main.AddFragment"
-            android:label="add_fragment"
-            tools:layout="@layout/add_fragment"/>
+            android:label="Add Todo"
+            tools:layout="@layout/add_todo_fragment"/>
     <action android:id="@+id/action_global_addFragment"
             app:destination="@id/addFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
@@ -39,4 +42,9 @@
               android:label="fragment_settings" tools:layout="@layout/fragment_settings"/>
     <fragment android:id="@+id/profileFragment2" android:name="cespresso.gmail.com.todoy.ui.main.ProfileFragment"
               android:label="fragment_profile" tools:layout="@layout/fragment_profile"/>
+    <fragment android:id="@+id/showFragment"
+              android:name="cespresso.gmail.com.todoy.ui.main.ShowFragment"
+              android:label="ShowFragment">
+        <argument android:name="todo_id" app:argType="integer"/>
+    </fragment>
 </navigation>
