@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cespresso.gmail.com.todoy.R
 import cespresso.gmail.com.todoy.di.Injectable
@@ -42,6 +43,10 @@ class ShowFragment : Fragment(),Injectable {
             val todo = viewModel.todos.value!!.first { it.id == todoId }
             todo_show_title.text = todo.title
             todo_show_body.text = todo.body
+            todo_show_edit_button.setOnClickListener{
+                val action  = ShowFragmentDirections.actionShowFragmentToEditFragment(todoId!!)
+                findNavController().navigate(action)
+            }
         }
 
     }

@@ -58,12 +58,19 @@
 
     <fragment android:id="@+id/showFragment"
               android:name="cespresso.gmail.com.todoy.ui.main.ShowFragment"
-              android:label="ShowFragment">
+              android:label="Detail">
         <argument android:name="todo_id" app:argType="integer"/>
+        <action android:id="@+id/action_showFragment_to_editFragment" app:destination="@id/editFragment"
+                app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
 
     <fragment android:id="@+id/aboutFragment"
               android:name="cespresso.gmail.com.todoy.ui.main.AboutFragment"
               android:label="About"
               tools:layout="@layout/about_fragment"/>
+    <fragment android:id="@+id/editFragment" android:name="cespresso.gmail.com.todoy.ui.main.EditFragment"
+              android:label="Edit" tools:layout="@layout/edit_todo_fragment">
+        <argument android:name="todo_id" app:argType="integer"/>
+    </fragment>
 </navigation>
