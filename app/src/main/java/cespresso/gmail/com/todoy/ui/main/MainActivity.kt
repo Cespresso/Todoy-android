@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity(),
     private lateinit var viewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(cespresso.gmail.com.todoy.R.layout.activity_main)
         setSupportActionBar(toolbar)
