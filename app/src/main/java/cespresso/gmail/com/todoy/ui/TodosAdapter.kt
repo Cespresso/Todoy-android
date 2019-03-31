@@ -30,7 +30,7 @@ class TodosAdapter(private val todos:MutableList<Todo>,private val itemClickList
         private val titleBody = itemView.findViewById<TextView>(R.id.list_todo_body)
         fun bind(todo: Todo,itemClickListener: (todo:Todo)->Unit){
             titleText.text = todo.title
-            titleBody.text = todo.body
+            titleBody.text = todo.getShortBody()
             itemView.setOnClickListener {
                 itemClickListener(todo)
             }
