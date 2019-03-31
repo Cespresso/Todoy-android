@@ -157,6 +157,7 @@ class MainActivity : AppCompatActivity(),
         super.onResume()
         checkUserAuth()
         viewModel.getServerStatusTask()
+        viewModel.refreshAllTodoByRemote()
     }
     private fun checkUserAuth(){
         viewModel.user.value = FirebaseAuth.getInstance()

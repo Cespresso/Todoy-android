@@ -9,12 +9,17 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cespresso.gmail.com.todoy.R
 import cespresso.gmail.com.todoy.di.Injectable
+import cespresso.gmail.com.todoy.ui.Event
+import cespresso.gmail.com.todoy.ui.TaskState
 import cespresso.gmail.com.todoy.ui.TodosAdapter
+import kotlinx.android.synthetic.main.home_fragment_todo_list.*
 import javax.inject.Inject
 
 class HomeFragment : Fragment(),Injectable{
@@ -47,6 +52,8 @@ class HomeFragment : Fragment(),Injectable{
         list.layoutManager = mLinearLayoutManager
         list.adapter = TodosAdapter(viewModel.todos.value!!) { item->
             Log.i("^v^",item.body)
+            val action  = HomeFragmentDirections.actionMainFragmentToShowFragment(item.id!!)
+            findNavController().navigate(action)
         }
         viewModel.todos.observe(this@HomeFragment, Observer {
             val adapter = list.adapter
@@ -54,12 +61,24 @@ class HomeFragment : Fragment(),Injectable{
                 adapter.notifyDataSetChanged()
             }
         })
-        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
-        swipeRefreshLayout.setOnRefreshListener {
+        swipe_refresh_layout.setOnRefreshListener {
             viewModel.refreshAllTodoByRemote()
         }
-        viewModel.todoRefreshState.observe(this@HomeFragment, Observer<Boolean> {
-            swipeRefreshLayout.isRefreshing = it
+        viewModel.todoRefreshState.observe(this@HomeFragment, Observer<Event<TaskState>> {
+            it.getContentIfNotHandled()?.let { state->
+                when(state){
+                    is TaskState.Progress -> swipe_refresh_layout.isRefreshing = true
+                    is TaskState.Figure->{
+                        swipe_refresh_layout.isRefreshing = false
+                        viewModel.makeSnackBarEvent.value = Event("Todoの更新に失敗しました")
+                    }
+                    is TaskState.Complete<*> ->{
+                        swipe_refresh_layout.isRefreshing = false
+                        viewModel.makeSnackBarEvent.value = Event("Todoの更新に成功しました")
+                    }
+                    else ->swipe_refresh_layout.isRefreshing = false
+                }
+            }
         })
 //        viewModel.user.observe(this@MainActivity, Observer {user->
 //            when(user){
