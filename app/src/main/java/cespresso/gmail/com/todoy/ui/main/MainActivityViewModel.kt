@@ -60,7 +60,9 @@ class MainActivityViewModel @Inject constructor(
                 val todos_result = api.getAllTodo("Bearer "+task.token).await()
                 if (todos_result.isSuccessful) {
                     todos.value?.clear()
-                    todos.value?.addAll(todos_result.body()!!)
+                    // ひとまずIDでソート出力
+                    val sortedTodo = todos_result.body()!!.sortedBy { it.id }
+                    todos.value?.addAll(sortedTodo)
                 }else{
                     throw Exception("サーバーからエラーを返されました")
                 }
