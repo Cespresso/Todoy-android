@@ -40,7 +40,11 @@ import android.opengl.Visibility
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.plusAssign
+import cespresso.gmail.com.todoy.ui.DialogNavigator
 import cespresso.gmail.com.todoy.ui.Event
+import cespresso.gmail.com.todoy.ui.YesOrNoDialogDirections
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
@@ -69,13 +73,22 @@ class MainActivity : AppCompatActivity(),
         setContentView(cespresso.gmail.com.todoy.R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+
+
+        val navController = findNavController(R.id.my_nav_host_fragment)
+        val dialogNavigator = DialogNavigator(my_nav_host_fragment.childFragmentManager)
+        navController.navigatorProvider += dialogNavigator
+
+        val graph = navController.navInflater.inflate(R.navigation.main_navigation)
+        navController.graph = graph
+
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainActivityViewModel::class.java)
 
         //
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(cespresso.gmail.com.todoy.R.id.my_nav_host_fragment) as NavHostFragment? ?: return
         // Set up Action Bar
-        val navController = host.navController
+//        val navController = host.navController
         // 現在表示されているfragmentの監視
         // これは今までの方法
         host.childFragmentManager.addOnBackStackChangedListener {
@@ -83,7 +96,7 @@ class MainActivity : AppCompatActivity(),
             host.childFragmentManager.fragments[0]?.let {
                 when (it) {
                     is HomeFragment -> {
-                        fab.show()
+                        fab.show() // TODO ここと
                     }
                     is AddFragment -> {
                         actionBar?.hide()
@@ -266,7 +279,7 @@ class MainActivity : AppCompatActivity(),
 
             logoutButton.isEnabled = true
 
-            fab.show()
+            fab.show()// TODOここが危険
         }else{
             naviHeaderLogin.visibility = View.INVISIBLE
             naviHeaderLogout.visibility = View.VISIBLE

@@ -73,4 +73,11 @@
               android:label="Edit" tools:layout="@layout/edit_todo_fragment">
         <argument android:name="todo_id" app:argType="integer"/>
     </fragment>
+    <dialog_fragment android:id="@+id/yesOrNoDialog" android:name="cespresso.gmail.com.todoy.ui.YesOrNoDialog"
+              android:label="YesOrNoDialog">
+        <argument android:name="title" app:argType="string"/>
+        <argument android:name="message" app:argType="string"/>
+        <argument android:name="requestCode" app:argType="integer"/>
+    </dialog_fragment>
+    <action android:id="@+id/action_global_yesOrNoDialog" app:destination="@id/yesOrNoDialog"/>
 </navigation>

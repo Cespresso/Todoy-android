@@ -1,5 +1,6 @@
 package cespresso.gmail.com.todoy.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cespresso.gmail.com.todoy.R
 import cespresso.gmail.com.todoy.di.Injectable
+import cespresso.gmail.com.todoy.ui.YesOrNoDialogDirections
 import kotlinx.android.synthetic.main.show_todo_fragment.*
 import javax.inject.Inject
 
@@ -48,7 +50,17 @@ class ShowFragment : Fragment(),Injectable {
                 findNavController().navigate(action)
             }
         }
+        todo_show_delete_button.setOnClickListener {
+            val action = YesOrNoDialogDirections.actionGlobalYesOrNoDialog("Delete","このTodoを削除しますか？",100)
+            findNavController().navigate(action)
+        }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.i("^v^",requestCode.toString())
+        Log.i("^v^",resultCode.toString())
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
 
