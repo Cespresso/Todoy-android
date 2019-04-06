@@ -23,4 +23,7 @@ interface ITodoyApiService {
     // Todoの削除
     @DELETE("todo/{id}")
     fun deleteTodo(@Header("Authorization") authToken: String,@Path("id") id:Int) :Deferred<Response<ResponseBody>>
+
+    @POST("todo/{id}")
+    fun editTodo(@Header("Authorization") authToken: String,@Path("id") id:Int, @Body todo: Todo) :Deferred<Response<ResponseBody>>
 }

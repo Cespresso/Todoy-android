@@ -39,6 +39,8 @@ class MainActivityViewModel @Inject constructor(
 
     val todoDeleteState = MutableLiveData<Event<TaskState>>()
 
+    val todoEditState = MutableLiveData<Event<TaskState>>()
+
     val loginEvent = MutableLiveData<Event<Unit>>()
 
     val makeSnackBarEvent = MutableLiveData<Event<String>>()
@@ -133,6 +135,28 @@ class MainActivityViewModel @Inject constructor(
                 }
             }catch (e:Exception){
                 Event(TaskState.Figure(Exception("todoの追加に失敗しました")))
+            }
+        }
+    }
+
+    fun editTodoTask(todo:Todo){
+        val firebaseUser = user.value?.currentUser
+        if(firebaseUser==null){
+            makeSnackBarEvent.value = Event("削除に失敗しました。ログイン状態をお確かめいただき再度お願いします。")
+            return
+        }
+        viewModelScope.launch {
+            todoEditState.value  = Event(TaskState.Progress)
+            todoEditState.value = try{
+                val task = firebaseUser.getIdToken(true).await()
+                val result = api.editTodo("Bearer "+task.token,todo.id!!,todo).await()
+                if(result.isSuccessful){
+                    Event(TaskState.Complete(null))
+                }else{
+                    Event(TaskState.Figure(Exception("todoの更新に失敗しました")))
+                }
+            }catch (e:Exception){
+                Event(TaskState.Figure(Exception("todoの更新に失敗しました")))
             }
         }
     }
