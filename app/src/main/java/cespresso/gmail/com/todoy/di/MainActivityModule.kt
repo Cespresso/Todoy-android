@@ -1,9 +1,6 @@
 package cespresso.gmail.com.todoy.di
 
-import cespresso.gmail.com.todoy.ui.main.AddFragment
-import cespresso.gmail.com.todoy.ui.main.EditFragment
-import cespresso.gmail.com.todoy.ui.main.HomeFragment
-import cespresso.gmail.com.todoy.ui.main.ShowFragment
+import cespresso.gmail.com.todoy.ui.main.*
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -20,4 +17,7 @@ abstract class MainActivityModule {
 
     @ContributesAndroidInjector
     abstract fun contributeEditFragment(): EditFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeProfileFragment(): ProfileFragment
 }

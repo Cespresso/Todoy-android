@@ -43,6 +43,8 @@ class MainActivityViewModel @Inject constructor(
 
     val loginEvent = MutableLiveData<Event<Unit>>()
 
+    val logoutEvent = MutableLiveData<Event<Unit>>()
+
     val makeSnackBarEvent = MutableLiveData<Event<String>>()
 
     // プログレスバーを表示するためのローディングスタック
@@ -50,6 +52,9 @@ class MainActivityViewModel @Inject constructor(
 
     fun loginTask(){
         loginEvent.value = Event(Unit)
+    }
+    fun logoutTask(){
+        logoutEvent.value = Event(Unit)
     }
     fun refreshAllTodoByRemote(){
         val firebaseUser = user.value?.currentUser

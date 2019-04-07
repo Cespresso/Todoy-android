@@ -3,10 +3,10 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/main_navigation"
-            app:startDestination="@id/mainFragment">
+            app:startDestination="@id/homeFragment">
 
     <fragment
-            android:id="@+id/mainFragment"
+            android:id="@+id/homeFragment"
             android:name="cespresso.gmail.com.todoy.ui.main.HomeFragment"
             android:label="Home">
         <action
@@ -22,6 +22,7 @@
         <action android:id="@+id/action_mainFragment_to_aboutFragment" app:destination="@id/aboutFragment"
                 app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_pop_exit_anim"
                 app:popEnterAnim="@anim/nav_default_enter_anim" app:popExitAnim="@anim/nav_default_exit_anim"/>
+        <action android:id="@+id/action_mainFragment_to_profileFragment2" app:destination="@id/profileFragment"/>
     </fragment>
     <fragment
             android:id="@+id/addFragment"
@@ -51,9 +52,9 @@
               android:label="fragment_settings"
               tools:layout="@layout/fragment_settings"/>
 
-    <fragment android:id="@+id/profileFragment2"
+    <fragment android:id="@+id/profileFragment"
               android:name="cespresso.gmail.com.todoy.ui.main.ProfileFragment"
-              android:label="fragment_profile"
+              android:label="Profile"
               tools:layout="@layout/profile_fragment"/>
 
     <fragment android:id="@+id/showFragment"
