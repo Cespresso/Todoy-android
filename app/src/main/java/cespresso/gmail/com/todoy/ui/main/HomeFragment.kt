@@ -20,6 +20,7 @@ import cespresso.gmail.com.todoy.di.Injectable
 import cespresso.gmail.com.todoy.ui.Event
 import cespresso.gmail.com.todoy.ui.TaskState
 import cespresso.gmail.com.todoy.ui.TodosAdapter
+import cespresso.gmail.com.todoy.ui.WrapContentLinearLayoutManager
 import kotlinx.android.synthetic.main.home_fragment_todo_list.*
 import javax.inject.Inject
 
@@ -38,7 +39,7 @@ class HomeFragment : Fragment(),Injectable{
         setHasOptionsMenu(true)
         viewModel = ViewModelProviders.of(activity!!,viewModelFactory).get(MainActivityViewModel::class.java)
 
-        mLinearLayoutManager = LinearLayoutManager(container?.context)
+        mLinearLayoutManager = WrapContentLinearLayoutManager(container?.context!!)
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
@@ -53,14 +54,21 @@ class HomeFragment : Fragment(),Injectable{
         val itemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
         list.addItemDecoration(itemDecoration)
         list.layoutManager = mLinearLayoutManager
-        list.adapter = TodosAdapter(viewModel.todos.value!!) { item->
-            val action  = HomeFragmentDirections.actionMainFragmentToShowFragment(item.id!!)
-            findNavController().navigate(action)
-        }
-        viewModel.todos.observe(this@HomeFragment, Observer {
+        list.adapter = TodosAdapter(viewModel.todos.value!! ,
+            { item->
+                val action  = HomeFragmentDirections.actionMainFragmentToShowFragment(item.id!!)
+                findNavController().navigate(action)
+            },{ todo, isChecked ->
+                // todoをisCheckedの値を基に変更
+                todo.completed = isChecked
+                viewModel.editTodoTask(todo)
+            }
+        )
+        viewModel.todos.observe(this@HomeFragment, Observer {todo->
             val adapter = list.adapter
             if(adapter is TodosAdapter){
-                adapter.notifyDataSetChanged()
+                adapter.setTodo(todo)
+//                adapter.notifyDataSetChanged()
             }
         })
         swipe_refresh_layout.setOnRefreshListener {

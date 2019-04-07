@@ -71,7 +71,8 @@ class MainActivityViewModel @Inject constructor(
                     todos.value?.clear()
                     // ひとまずIDでソート出力
                     val sortedTodo = todos_result.body()!!.sortedBy { it.id }
-                    todos.value?.addAll(sortedTodo)
+//                    todos.value?.addAll(sortedTodo)
+                    todos.value = sortedTodo.toMutableList()
                 }else{
                     throw Exception("サーバーからエラーを返されました")
                 }
