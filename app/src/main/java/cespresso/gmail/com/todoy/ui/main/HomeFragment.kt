@@ -84,7 +84,6 @@ class HomeFragment : Fragment(),Injectable{
                     }
                     is TaskState.Complete<*> ->{
                         swipe_refresh_layout.isRefreshing = false
-                        viewModel.makeSnackBarEvent.value = Event("Todoの更新に成功しました")
                     }
                     else ->swipe_refresh_layout.isRefreshing = false
                 }
