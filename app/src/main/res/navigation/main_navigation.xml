@@ -19,10 +19,6 @@
         <action android:id="@+id/action_mainFragment_to_showFragment" app:destination="@id/showFragment"
                 app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-        <action android:id="@+id/action_mainFragment_to_aboutFragment" app:destination="@id/aboutFragment"
-                app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_pop_exit_anim"
-                app:popEnterAnim="@anim/nav_default_enter_anim" app:popExitAnim="@anim/nav_default_exit_anim"/>
-        <action android:id="@+id/action_mainFragment_to_profileFragment2" app:destination="@id/profileFragment"/>
     </fragment>
     <fragment
             android:id="@+id/addFragment"
@@ -47,7 +43,7 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:launchSingleTop="true"/>
-    <fragment android:id="@+id/settingsFragment2"
+    <fragment android:id="@+id/settingsFragment"
               android:name="cespresso.gmail.com.todoy.ui.main.SettingsFragment"
               android:label="fragment_settings"
               tools:layout="@layout/fragment_settings"/>

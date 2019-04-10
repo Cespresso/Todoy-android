@@ -124,7 +124,13 @@ class MainActivity : AppCompatActivity(),
         // toolbarの設定
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.homeFragment),
+            // Top level destinationの追加(ここに追加された目的地はnavigation menuが表示できるようになる)
+            setOf(
+                R.id.homeFragment,
+                R.id.profileFragment,
+                R.id.settingsFragment,
+                R.id.aboutFragment
+            ),
             drawerLayout
         )
 
