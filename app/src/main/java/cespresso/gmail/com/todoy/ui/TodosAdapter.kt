@@ -8,11 +8,14 @@ import android.widget.AdapterView
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import cespresso.gmail.com.todoy.R
 import cespresso.gmail.com.todoy.data.entity.Todo
+import com.google.common.io.Resources.getResource
 import kotlinx.android.synthetic.main.todo_row.view.*
 
 class TodosAdapter(private var todos:MutableList<Todo>,private val itemClickListener: (todo:Todo)->Unit,private val checkBoxClickListener: (todo:Todo,isChecked:Boolean)->Unit) : RecyclerView.Adapter<TodosAdapter.ViewHolder>(){
@@ -31,19 +34,22 @@ class TodosAdapter(private var todos:MutableList<Todo>,private val itemClickList
     }
     fun setTodo(new_todos:MutableList<Todo>){
         if(todos.size == 0){
-            todos = new_todos
+            todos.clear()
+            todos.addAll(new_todos)
             notifyItemRangeInserted(0,new_todos.size)
+        }else{
+            val result = DiffUtil.calculateDiff(object :DiffUtil.Callback(){
+                override fun getOldListSize() = todos.size
+                override fun getNewListSize() = new_todos.size
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean
+                        = todos[oldItemPosition].id!! == new_todos[newItemPosition].id!!
+                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean
+                        = todos[oldItemPosition] ==  new_todos[newItemPosition]
+            })
+            todos.clear()
+            todos.addAll(new_todos)
+            result.dispatchUpdatesTo(this)
         }
-        val result = DiffUtil.calculateDiff(object :DiffUtil.Callback(){
-            override fun getOldListSize() = todos.size
-            override fun getNewListSize() = new_todos.size
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean
-                = todos[oldItemPosition] == new_todos[newItemPosition]
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean
-                = todos[oldItemPosition].id!! == new_todos[newItemPosition].id!!
-        })
-        todos = new_todos
-        result.dispatchUpdatesTo(this)
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -55,10 +61,14 @@ class TodosAdapter(private var todos:MutableList<Todo>,private val itemClickList
                 todoTitle.text = HtmlCompat.fromHtml("<del>${todo.title.toString()}</del>",HtmlCompat.FROM_HTML_MODE_LEGACY)
                 todoBody.text = HtmlCompat.fromHtml("<del>${todo.getShortBody()}</del>",HtmlCompat.FROM_HTML_MODE_LEGACY)
                 todoCheckBox.isChecked = true
+                todoTitle.alpha = 0.6f
+                todoBody.alpha = 0.6f
             }else{
                 todoTitle.text = todo.title
                 todoBody.text = todo.getShortBody()
                 todoCheckBox.isChecked = false
+                todoTitle.alpha = 1f
+                todoBody.alpha = 1f
             }
 
             itemView.setOnClickListener {

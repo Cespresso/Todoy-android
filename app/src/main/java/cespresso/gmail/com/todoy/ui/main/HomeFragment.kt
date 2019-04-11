@@ -31,6 +31,8 @@ class HomeFragment : Fragment(),Injectable{
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    lateinit var todosAdapter: TodosAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,6 +40,17 @@ class HomeFragment : Fragment(),Injectable{
     ): View? {
         setHasOptionsMenu(true)
         viewModel = ViewModelProviders.of(activity!!,viewModelFactory).get(MainActivityViewModel::class.java)
+        todosAdapter = TodosAdapter(
+            mutableListOf() ,
+            { item->
+                val action  = HomeFragmentDirections.actionMainFragmentToShowFragment(item.id!!)
+                findNavController().navigate(action)
+            },{ todo, isChecked ->
+                // todoをisCheckedの値を基に変更
+                todo.completed = isChecked
+                viewModel.editTodoTask(todo)
+            }
+        )
 
         mLinearLayoutManager = WrapContentLinearLayoutManager(container?.context!!)
         return inflater.inflate(R.layout.home_fragment, container, false)
@@ -54,16 +67,7 @@ class HomeFragment : Fragment(),Injectable{
         val itemDecoration = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
         list.addItemDecoration(itemDecoration)
         list.layoutManager = mLinearLayoutManager
-        list.adapter = TodosAdapter(viewModel.todos.value!! ,
-            { item->
-                val action  = HomeFragmentDirections.actionMainFragmentToShowFragment(item.id!!)
-                findNavController().navigate(action)
-            },{ todo, isChecked ->
-                // todoをisCheckedの値を基に変更
-                todo.completed = isChecked
-                viewModel.editTodoTask(todo)
-            }
-        )
+        list.adapter = todosAdapter
         viewModel.todos.observe(this@HomeFragment, Observer {todo->
             val adapter = list.adapter
             if(adapter is TodosAdapter){
