@@ -40,6 +40,9 @@ import android.opengl.Visibility
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.plusAssign
 import cespresso.gmail.com.todoy.ui.DialogNavigator
@@ -67,6 +70,8 @@ class MainActivity : AppCompatActivity(),
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: MainActivityViewModel
 
+    lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
@@ -75,7 +80,7 @@ class MainActivity : AppCompatActivity(),
 
 
 
-        val navController = findNavController(R.id.my_nav_host_fragment)
+        navController = findNavController(R.id.my_nav_host_fragment)
         val dialogNavigator = DialogNavigator(my_nav_host_fragment.childFragmentManager)
         navController.navigatorProvider += dialogNavigator
 
@@ -133,6 +138,8 @@ class MainActivity : AppCompatActivity(),
             ),
             drawerLayout
         )
+        supportActionBar!!.hide()
+        drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED )
 
         // 行先にlabelを表示する。←と🍔アイコンを出し分ける
         toolbar.setupWithNavController(navController, appBarConfiguration)
@@ -157,6 +164,7 @@ class MainActivity : AppCompatActivity(),
             user.observe(this@MainActivity, Observer<FirebaseAuth> { auth ->
                 auth?.let{
                     updateNavigationView(auth.currentUser)
+                    updateByUserState(auth.currentUser)
                 }
             })
             loginEvent.observe(this@MainActivity, Observer { event ->
@@ -189,7 +197,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        Log.d("TAG", "firebaseAuthWithGoogle:" + acct.id);
+        Log.d("TAG", "firebaseAuthWithGoogle:" + acct.id)
 
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null);
         val mAuth = FirebaseAuth.getInstance()
@@ -200,6 +208,8 @@ class MainActivity : AppCompatActivity(),
                     displaySnackBar("ログインに成功しました")
                     Log.d("TAG", "signInWithCredential:success");
                     viewModel.user.value = mAuth
+                    val action = HomeFragmentDirections.actionGlobalHomeFragment()
+                    navController.navigate(action)
                     //                    updateNavigationView()
                 } else {
                     // If sign in fails, display a message to the user.
@@ -248,7 +258,7 @@ class MainActivity : AppCompatActivity(),
         startActivity(intent)
     }
     private fun displaySnackBar(text:String){
-        my_nav_host_fragment.view?.let {
+        my_nav_host_fragment.view!!.let {
             Snackbar.make(it,text,Snackbar.LENGTH_LONG).show()
         }
     }
@@ -259,6 +269,19 @@ class MainActivity : AppCompatActivity(),
         naviSignInButton.setOnClickListener {
             viewModel.loginTask()
         }
+    }
+    private fun updateByUserState(user:FirebaseUser?){
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        if(user!=null) {
+            supportActionBar!!.show()
+            drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED )
+        }else{
+            supportActionBar!!.hide()
+            drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED )
+            val action = LoginFragmentDirections.actionGlobalLoginFragment()
+            navController.navigate(action)
+        }
+
     }
 
     private fun updateNavigationView(user:FirebaseUser?){

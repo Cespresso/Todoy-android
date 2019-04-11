@@ -36,13 +36,15 @@
               android:name="cespresso.gmail.com.todoy.ui.main.LoginFragment"
               android:label="login_fragment"
               tools:layout="@layout/login_fragment"/>
-    <action android:id="@+id/action_global_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_enter_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:launchSingleTop="true"/>
+        <action android:id="@+id/action_global_loginFragment"
+                app:destination="@id/loginFragment"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_enter_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+                app:popExitAnim="@anim/nav_default_pop_exit_anim"
+                app:launchSingleTop="true"
+                app:popUpTo="@+id/main_navigation"
+                app:popUpToInclusive="true" />/>
     <fragment android:id="@+id/settingsFragment"
               android:name="cespresso.gmail.com.todoy.ui.main.SettingsFragment"
               android:label="fragment_settings"
@@ -77,4 +79,12 @@
         <argument android:name="requestCode" app:argType="integer"/>
     </dialog_fragment>
     <action android:id="@+id/action_global_yesOrNoDialog" app:destination="@id/yesOrNoDialog"/>
+    <action android:id="@+id/action_global_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/main_navigation"
+            app:popUpToInclusive="true"/>
 </navigation>

@@ -20,4 +20,7 @@ abstract class MainActivityModule {
 
     @ContributesAndroidInjector
     abstract fun contributeProfileFragment(): ProfileFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeLoginFragment(): LoginFragment
 }

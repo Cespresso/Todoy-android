@@ -57,11 +57,7 @@ class MainActivityViewModel @Inject constructor(
         logoutEvent.value = Event(Unit)
     }
     fun refreshAllTodoByRemote(){
-        val firebaseUser = user.value?.currentUser
-        if(firebaseUser==null){
-            makeSnackBarEvent.value = Event("登録に失敗しました。ログイン状態をお確かめいただき再度お願いします。")
-            return
-        }
+        val firebaseUser = user.value?.currentUser ?: return
         viewModelScope.launch {
             todoRefreshState.value  = Event(TaskState.Progress)
             todoRefreshState.value =  try{
@@ -84,11 +80,7 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun saveTodoTask(todo:Todo){
-        val firebaseUser = user.value?.currentUser
-        if(firebaseUser==null){
-            makeSnackBarEvent.value = Event("登録に失敗しました。ログイン状態をお確かめいただき再度お願いします。")
-            return
-        }
+        val firebaseUser = user.value?.currentUser ?: return
         viewModelScope.launch {
             todoAddState.value  = Event(TaskState.Progress)
             todoAddState.value = try{
@@ -111,9 +103,9 @@ class MainActivityViewModel @Inject constructor(
             try{
                 val result = api.getServerStatus().await()
                 if(result.isSuccessful){
-                    result.body()?.let {
-                        makeSnackBarEvent.value = Event(it.string())
-                    }
+//                    result.body()?.let {
+//                        makeSnackBarEvent.value = Event()
+//                    }
                 }else{
                     Exception("Todoサーバーとの接続に失敗しました通信状態をお確かめください")
                 }

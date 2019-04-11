@@ -21,6 +21,7 @@ import cespresso.gmail.com.todoy.ui.Event
 import cespresso.gmail.com.todoy.ui.TaskState
 import cespresso.gmail.com.todoy.ui.TodosAdapter
 import cespresso.gmail.com.todoy.ui.WrapContentLinearLayoutManager
+import kotlinx.android.synthetic.main.home_fragment_login.*
 import kotlinx.android.synthetic.main.home_fragment_todo_list.*
 import javax.inject.Inject
 
@@ -124,5 +125,10 @@ class HomeFragment : Fragment(),Injectable{
 //                }
 //            }
 //        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshAllTodoByRemote()
     }
 }
