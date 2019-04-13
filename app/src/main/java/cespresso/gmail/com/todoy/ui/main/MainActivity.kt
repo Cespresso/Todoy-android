@@ -49,6 +49,7 @@ import cespresso.gmail.com.todoy.ui.DialogNavigator
 import cespresso.gmail.com.todoy.ui.Event
 import cespresso.gmail.com.todoy.ui.YesOrNoDialogDirections
 import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.firebase.FirebaseApp
@@ -243,19 +244,29 @@ class MainActivity : AppCompatActivity(),
             .requestIdToken(getString(R.string.auth_web_client_id))
             .requestEmail()
             .build()
-        val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        val mGoogleSignInClient:GoogleSignInClient = GoogleSignIn.getClient(this, gso)
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
     private fun startLogout(){
-        viewModel.user.value?.signOut()
-        val intent = intent
-        overridePendingTransition(0, 0)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        finish()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.auth_web_client_id))
+            .requestEmail()
+            .build()
+        val mGoogleSignInClient:GoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        mGoogleSignInClient.revokeAccess().addOnCompleteListener {
+            viewModel.user.value?.signOut()
+            val intent = intent
+            overridePendingTransition(0, 0)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            finish()
 
-        overridePendingTransition(0, 0)
-        startActivity(intent)
+            overridePendingTransition(0, 0)
+            startActivity(intent)
+        }.addOnFailureListener {
+            viewModel.makeSnackBarEvent.value = Event("ログアウトに失敗しました。")
+        }
+
     }
     private fun displaySnackBar(text:String){
         my_nav_host_fragment.view!!.let {
