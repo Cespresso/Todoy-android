@@ -42,7 +42,6 @@ class HomeFragment : Fragment(),Injectable{
         setHasOptionsMenu(true)
         viewModel = ViewModelProviders.of(activity!!,viewModelFactory).get(MainActivityViewModel::class.java)
         todosAdapter = TodosAdapter(
-            mutableListOf() ,
             { item->
                 val action  = HomeFragmentDirections.actionMainFragmentToShowFragment(item.id!!)
                 findNavController().navigate(action)

@@ -18,7 +18,10 @@ import cespresso.gmail.com.todoy.data.entity.Todo
 import com.google.common.io.Resources.getResource
 import kotlinx.android.synthetic.main.todo_row.view.*
 
-class TodosAdapter(private var todos:MutableList<Todo>,private val itemClickListener: (todo:Todo)->Unit,private val checkBoxClickListener: (todo:Todo,isChecked:Boolean)->Unit) : RecyclerView.Adapter<TodosAdapter.ViewHolder>(){
+class TodosAdapter(private val itemClickListener: (todo:Todo)->Unit,private val checkBoxClickListener: (todo:Todo,isChecked:Boolean)->Unit) : RecyclerView.Adapter<TodosAdapter.ViewHolder>(){
+
+    private val todos = mutableListOf<Todo>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(inflater.inflate(R.layout.todo_row,parent,false))
