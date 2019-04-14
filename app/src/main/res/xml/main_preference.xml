@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+            app:key="periodic_synchronization"
+            app:title="Todoの定期同期を有効にする"/>
+
+</androidx.preference.PreferenceScreen>

@@ -41,11 +41,14 @@ class MainActivityViewModel @Inject constructor(
 
     val todoEditState = MutableLiveData<Event<TaskState>>()
 
+
     val loginEvent = MutableLiveData<Event<Unit>>()
 
     val logoutEvent = MutableLiveData<Event<Unit>>()
 
     val makeSnackBarEvent = MutableLiveData<Event<String>>()
+
+    val periodicSynchronizationPref = MutableLiveData<Boolean>()
 
     // プログレスバーを表示するためのローディングスタック
     val loadingEventStack = MutableLiveData<MutableList<String>>()
@@ -157,6 +160,13 @@ class MainActivityViewModel @Inject constructor(
                 Event(TaskState.Figure(Exception("todoの更新に失敗しました")))
             }
         }
+    }
+
+    fun startSynchronizationWorker(){
+        makeSnackBarEvent.value = Event("同期を開始しました")
+    }
+    fun stopSynchronizationWorker(){
+        makeSnackBarEvent.value = Event("同期を終了しました")
     }
 
 //    private suspend fun getAllTodoByRemote(){

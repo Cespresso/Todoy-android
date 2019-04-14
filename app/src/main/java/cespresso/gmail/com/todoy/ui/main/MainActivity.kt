@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.fragment.app.Fragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
@@ -45,13 +46,17 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.plusAssign
+import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import cespresso.gmail.com.todoy.ui.DialogNavigator
 import cespresso.gmail.com.todoy.ui.Event
 import cespresso.gmail.com.todoy.ui.YesOrNoDialogDirections
+import cespresso.gmail.com.todoy.ui.booleanLiveData
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.util.SharedPreferencesUtils
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.home_fragment.*
@@ -72,6 +77,7 @@ class MainActivity : AppCompatActivity(),
     private lateinit var viewModel: MainActivityViewModel
 
     lateinit var navController: NavController
+    lateinit var sharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -90,7 +96,6 @@ class MainActivity : AppCompatActivity(),
 
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(MainActivityViewModel::class.java)
 
-        //
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(cespresso.gmail.com.todoy.R.id.my_nav_host_fragment) as NavHostFragment? ?: return
         // Set up Action Bar
@@ -183,8 +188,17 @@ class MainActivity : AppCompatActivity(),
                     displaySnackBar(it)
                 }
             })
+            periodicSynchronizationPref.observe(this@MainActivity, Observer {
+                if(it){
+                    viewModel.startSynchronizationWorker()
+                }else{
+                    viewModel.stopSynchronizationWorker()
+                }
+            })
         }
-
+        val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        sharedPreferenceChangeListener = makePrefChangeListener()
+        prefs.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
 
     override fun onResume() {
@@ -319,6 +333,14 @@ class MainActivity : AppCompatActivity(),
             naviHeaderLogout.visibility = View.VISIBLE
 
             fab.hide()
+        }
+    }
+    private fun makePrefChangeListener(): SharedPreferences.OnSharedPreferenceChangeListener {
+        return SharedPreferences.OnSharedPreferenceChangeListener{ sharedPreferences: SharedPreferences, key: String ->
+            Log.i("^v^","呼ばれていなくない？")
+            if(key == "periodic_synchronization"){
+                viewModel.periodicSynchronizationPref.value = sharedPreferences.getBoolean(key,false)
+            }
         }
     }
 }
