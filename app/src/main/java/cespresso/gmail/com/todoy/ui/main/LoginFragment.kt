@@ -34,6 +34,9 @@ class LoginFragment : Fragment(),Injectable {
         sign_in_button.setOnClickListener {
             viewModel.loginEvent.value = Event(Unit)
         }
+        sign_in_anonymously_button.setOnClickListener {
+            viewModel.loginAnonymouslyEvent.value = Event(Unit)
+        }
     }
 
 }

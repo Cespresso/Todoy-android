@@ -51,7 +51,6 @@ import androidx.preference.PreferenceManager
 import cespresso.gmail.com.todoy.ui.DialogNavigator
 import cespresso.gmail.com.todoy.ui.Event
 import cespresso.gmail.com.todoy.ui.YesOrNoDialogDirections
-import cespresso.gmail.com.todoy.ui.booleanLiveData
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -178,6 +177,11 @@ class MainActivity : AppCompatActivity(),
                     startLogin()
                 }
             })
+            loginAnonymouslyEvent.observe(this@MainActivity, Observer { event->
+                event?.getContentIfNotHandled()?.let {
+                    startLoginAnonymously()
+                }
+            })
             logoutEvent.observe(this@MainActivity, Observer {event->
                 event?.getContentIfNotHandled()?.let{
                     startLogout()
@@ -262,6 +266,21 @@ class MainActivity : AppCompatActivity(),
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
+
+    private fun startLoginAnonymously(){
+        val mAuth = FirebaseAuth.getInstance()
+        mAuth.signInAnonymously().addOnCompleteListener { task ->
+            if(task.isSuccessful){
+                val action = HomeFragmentDirections.actionGlobalHomeFragment()
+                navController.navigate(action)
+            }else{
+                displaySnackBar("ログインに失敗しました")
+                Log.w("TAG", "signInWithCredential:failure", task.getException());
+            }
+            viewModel.user.value = mAuth
+        }
+    }
+
     private fun startLogout(){
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.auth_web_client_id))

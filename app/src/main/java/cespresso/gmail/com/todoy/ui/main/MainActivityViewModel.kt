@@ -44,6 +44,8 @@ class MainActivityViewModel @Inject constructor(
 
     val loginEvent = MutableLiveData<Event<Unit>>()
 
+    val loginAnonymouslyEvent = MutableLiveData<Event<Unit>>()
+
     val logoutEvent = MutableLiveData<Event<Unit>>()
 
     val makeSnackBarEvent = MutableLiveData<Event<String>>()
