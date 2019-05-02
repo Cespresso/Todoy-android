@@ -1,9 +1,7 @@
 package cespresso.gmail.com.todoy.ui.main
 
+
 import androidx.lifecycle.MutableLiveData
-
-
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cespresso.gmail.com.todoy.await
@@ -12,12 +10,7 @@ import cespresso.gmail.com.todoy.data.source.remote.ITodoyApiService
 import cespresso.gmail.com.todoy.ui.Event
 import cespresso.gmail.com.todoy.ui.TaskState
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 class MainActivityViewModel @Inject constructor(

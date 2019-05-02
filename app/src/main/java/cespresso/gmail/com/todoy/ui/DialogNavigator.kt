@@ -19,11 +19,19 @@ class DialogNavigator(
         private const val TAG = "dialog"
     }
 
-    override fun navigate(destination: Destination, args: Bundle?, navOptions: NavOptions?, navigatorExtras: Extras?):Destination? {
+    override fun navigate(
+        destination: Destination,
+        args: Bundle?,
+        navOptions: NavOptions?,
+        navigatorExtras: Extras?
+    ): Destination? {
         val fragment = destination.createFragment(args)
 
         // 結果を返すためにtargetFragmentを設定
-        fragment.setTargetFragment(fragmentManager.primaryNavigationFragment, YesOrNoDialogArgs.fromBundle(args).requestCode)
+        fragment.setTargetFragment(
+            fragmentManager.primaryNavigationFragment,
+            YesOrNoDialogArgs.fromBundle(args).requestCode
+        )
         fragment.show(fragmentManager, TAG)
 
         return null

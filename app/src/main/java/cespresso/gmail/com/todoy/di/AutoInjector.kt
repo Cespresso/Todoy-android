@@ -56,6 +56,7 @@ private fun handleActivity(activity: Activity) {
                         AndroidSupportInjection.inject(f)
                     }
                 }
-            }, true)
+            }, true
+        )
     }
 }

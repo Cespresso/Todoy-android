@@ -1,33 +1,29 @@
 package cespresso.gmail.com.todoy.ui.main
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cespresso.gmail.com.todoy.R
 import cespresso.gmail.com.todoy.di.Injectable
 import cespresso.gmail.com.todoy.ui.Event
 import cespresso.gmail.com.todoy.ui.TaskState
 import cespresso.gmail.com.todoy.ui.TodosAdapter
 import cespresso.gmail.com.todoy.ui.WrapContentLinearLayoutManager
-import kotlinx.android.synthetic.main.home_fragment_login.*
 import kotlinx.android.synthetic.main.home_fragment_todo_list.*
 import javax.inject.Inject
 
-class HomeFragment : Fragment(),Injectable{
+class HomeFragment : Fragment(), Injectable {
 
-    lateinit var viewModel:MainActivityViewModel
+    lateinit var viewModel: MainActivityViewModel
     lateinit var mLinearLayoutManager: LinearLayoutManager
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -40,12 +36,12 @@ class HomeFragment : Fragment(),Injectable{
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        viewModel = ViewModelProviders.of(activity!!,viewModelFactory).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(MainActivityViewModel::class.java)
         todosAdapter = TodosAdapter(
-            { item->
-                val action  = HomeFragmentDirections.actionMainFragmentToShowFragment(item.id!!)
+            { item ->
+                val action = HomeFragmentDirections.actionMainFragmentToShowFragment(item.id!!)
                 findNavController().navigate(action)
-            },{ todo, isChecked ->
+            }, { todo, isChecked ->
                 // todoをisCheckedの値を基に変更
                 todo.completed = isChecked
                 viewModel.editTodoTask(todo)
@@ -68,9 +64,9 @@ class HomeFragment : Fragment(),Injectable{
         list.addItemDecoration(itemDecoration)
         list.layoutManager = mLinearLayoutManager
         list.adapter = todosAdapter
-        viewModel.todos.observe(this@HomeFragment, Observer {todo->
+        viewModel.todos.observe(this@HomeFragment, Observer { todo ->
             val adapter = list.adapter
-            if(adapter is TodosAdapter){
+            if (adapter is TodosAdapter) {
                 adapter.setTodo(todo)
 //                adapter.notifyDataSetChanged()
             }
@@ -79,34 +75,36 @@ class HomeFragment : Fragment(),Injectable{
             viewModel.refreshAllTodoByRemote()
         }
         viewModel.todoRefreshState.observe(this@HomeFragment, Observer<Event<TaskState>> {
-            it.getContentIfNotHandled()?.let { state->
-                when(state){
+            it.getContentIfNotHandled()?.let { state ->
+                when (state) {
                     is TaskState.Progress -> swipe_refresh_layout.isRefreshing = true
-                    is TaskState.Figure->{
+                    is TaskState.Figure -> {
                         swipe_refresh_layout.isRefreshing = false
                         viewModel.makeSnackBarEvent.value = Event("Todoの更新に失敗しました")
                     }
-                    is TaskState.Complete<*> ->{
+                    is TaskState.Complete<*> -> {
                         swipe_refresh_layout.isRefreshing = false
                     }
-                    else ->swipe_refresh_layout.isRefreshing = false
+                    else -> swipe_refresh_layout.isRefreshing = false
                 }
             }
         })
         viewModel.todoEditState.observe(this@HomeFragment, Observer {
-            it.getContentIfNotHandled()?.let{state->
-                when(state){
-                    is TaskState.Progress -> {}
-                    is TaskState.Figure->{
+            it.getContentIfNotHandled()?.let { state ->
+                when (state) {
+                    is TaskState.Progress -> {
+                    }
+                    is TaskState.Figure -> {
                         //TODO checkboxがそのままになってしまう
                         // 独自にException classを定義して失敗したtodoのviewだけそれを基に変更する必要がありそう
                         viewModel.makeSnackBarEvent.value = Event("todoの更新に失敗しました")
                     }
-                    is TaskState.Complete<*> ->{
+                    is TaskState.Complete<*> -> {
                         // todoの更新に成功したらリフレッシュ
                         viewModel.refreshAllTodoByRemote()
                     }
-                    else ->{}
+                    else -> {
+                    }
                 }
             }
         })

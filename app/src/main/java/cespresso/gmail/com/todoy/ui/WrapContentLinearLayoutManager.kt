@@ -2,9 +2,8 @@ package cespresso.gmail.com.todoy.ui
 
 import android.content.Context
 import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
-
+import androidx.recyclerview.widget.RecyclerView
 
 
 internal class WrapContentLinearLayoutManager(val context: Context) : LinearLayoutManager(context) {

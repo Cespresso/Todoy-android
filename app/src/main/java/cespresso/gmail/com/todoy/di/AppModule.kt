@@ -13,7 +13,7 @@ class AppModule//(val application: Application)
 {
     @Singleton
     @Provides
-    internal fun providesApiService(app:Application): ITodoyApiService {
+    internal fun providesApiService(app: Application): ITodoyApiService {
         return ApiService(app).service
     }
 

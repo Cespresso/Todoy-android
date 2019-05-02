@@ -7,7 +7,6 @@ import androidx.fragment.app.DialogFragment
 
 class YesOrNoDialog:DialogFragment(){
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val args = YesOrNoDialogArgs.fromBundle(arguments)
         return AlertDialog.Builder(requireActivity())
@@ -20,7 +19,7 @@ class YesOrNoDialog:DialogFragment(){
                     sendResult(which)
             }.create()
     }
-    private fun sendResult(which:Int){
-        targetFragment?.onActivityResult(targetRequestCode,which,null)
+    private fun sendResult(which:Int) {
+        targetFragment?.onActivityResult(targetRequestCode, which, null)
     }
 }
