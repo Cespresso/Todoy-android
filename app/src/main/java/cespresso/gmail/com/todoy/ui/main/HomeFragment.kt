@@ -43,8 +43,7 @@ class HomeFragment : Fragment(), Injectable {
                 findNavController().navigate(action)
             }, { todo, isChecked ->
                 // todoをisCheckedの値を基に変更
-                todo.completed = isChecked
-                viewModel.editTodoTask(todo)
+                viewModel.toggleTodoCompleteTask(todo, isChecked)
             }
         )
 
@@ -89,22 +88,15 @@ class HomeFragment : Fragment(), Injectable {
                 }
             }
         })
-        viewModel.todoEditState.observe(this@HomeFragment, Observer {
+        viewModel.toggleTodoCompleteState.observe(this@HomeFragment, Observer {
             it.getContentIfNotHandled()?.let { state ->
                 when (state) {
-                    is TaskState.Progress -> {
-                    }
+                    is TaskState.Progress -> { }
                     is TaskState.Figure -> {
-                        //TODO checkboxがそのままになってしまう
-                        // 独自にException classを定義して失敗したtodoのviewだけそれを基に変更する必要がありそう
                         viewModel.makeSnackBarEvent.value = Event("todoの更新に失敗しました")
                     }
-                    is TaskState.Complete<*> -> {
-                        // todoの更新に成功したらリフレッシュ
-                        viewModel.refreshAllTodoByRemote()
-                    }
-                    else -> {
-                    }
+                    is TaskState.Complete<*> -> { }
+                    else -> { }
                 }
             }
         })
