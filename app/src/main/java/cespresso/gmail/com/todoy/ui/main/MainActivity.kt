@@ -44,8 +44,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
-//import kotlinx.android.synthetic.main.app_bar_main.*
-
 class MainActivity : AppCompatActivity(),
     HasSupportFragmentInjector/*, NavigationView.OnNavigationItemSelectedListener*/ {
     @Inject
@@ -137,16 +135,7 @@ class MainActivity : AppCompatActivity(),
 
         // 現在表示されているフラグメントが変更されたとき呼ばれる
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            //            supportActionBar?.title = destination.label
-//            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            when (destination.id) {
-                R.id.homeFragment -> {
-                    fab.show()
-                }
-                else -> {
-                    fab.hide()
-                }
-            }
+            checkCurrentDestinationForFab()
         }
         // livedataのハンドリング
         viewModel.apply {
@@ -189,7 +178,7 @@ class MainActivity : AppCompatActivity(),
         checkUserAuth()
         viewModel.getServerStatusTask()
         viewModel.refreshAllTodoByRemote()
-        checkFrontFragmet(host)
+        checkCurrentDestinationForFab()
     }
 
     private fun checkUserAuth() {
@@ -330,10 +319,10 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private fun checkFrontFragmet(host: NavHostFragment) {
-        host.childFragmentManager.fragments[0]?.let {
-            when (it) {
-                is HomeFragment -> {
+    private fun checkCurrentDestinationForFab() {
+        navController.currentDestination?.let {
+            when (it.id) {
+                R.id.homeFragment -> {
                     fab.show()
                 }
                 else -> {

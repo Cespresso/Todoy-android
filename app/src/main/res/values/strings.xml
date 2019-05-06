@@ -11,5 +11,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="auth_web_client_id">1059338935788-6g4apl8oq85dm21v6erg7rsbkvbbs9qo.apps.googleusercontent.com</string>
-    <string name="version">1.0.1</string>
+    <string name="version">1.0.2</string>
 </resources>
