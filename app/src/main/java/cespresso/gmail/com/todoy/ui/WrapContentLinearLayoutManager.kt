@@ -14,7 +14,6 @@ internal class WrapContentLinearLayoutManager(val context: Context) : LinearLayo
         try {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {
-            Log.e("TAG", "meet a IOOBE in RecyclerView")
         }
 
     }

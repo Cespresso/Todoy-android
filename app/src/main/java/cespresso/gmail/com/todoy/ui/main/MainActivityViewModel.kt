@@ -194,19 +194,6 @@ class MainActivityViewModel @Inject constructor(
         makeSnackBarEvent.value = Event("同期を終了しました")
     }
 
-//    private suspend fun getAllTodoByRemote(){
-//        val result = api.getAllTodo().await()
-//        if(result.isSuccessful){
-//            result.body()?.let {
-//                Log.i("^v^",it.toString())
-//            }
-//        }else{
-//            result.errorBody()?.let {
-//                Log.i("^v^",it.string())
-//            }
-//
-//        }
-//    }
 //    override fun onCleared() {
 //        super.onCleared()
 //        viewModelJob.cancel()
