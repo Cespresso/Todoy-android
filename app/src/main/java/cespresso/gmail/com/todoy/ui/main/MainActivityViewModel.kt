@@ -187,11 +187,11 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun startSynchronizationWorker() {
-        makeSnackBarEvent.value = Event("同期を開始しました")
+        makeSnackBarEvent.value = Event("現在この機能は実装されていません")
     }
 
     fun stopSynchronizationWorker() {
-        makeSnackBarEvent.value = Event("同期を終了しました")
+        makeSnackBarEvent.value = Event("")
     }
 
 //    override fun onCleared() {
