@@ -3,11 +3,11 @@ package cespresso.gmail.com.todoy.ui.main
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
@@ -32,6 +32,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -58,11 +59,12 @@ class MainActivity : AppCompatActivity(),
 
     lateinit var navController: NavController
     lateinit var sharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
+    lateinit var host: NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
-        setContentView(cespresso.gmail.com.todoy.R.layout.activity_main)
+        setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
 
@@ -76,37 +78,8 @@ class MainActivity : AppCompatActivity(),
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
 
-        val host: NavHostFragment = supportFragmentManager
-            .findFragmentById(cespresso.gmail.com.todoy.R.id.my_nav_host_fragment) as NavHostFragment? ?: return
-        // Set up Action Bar
-//        val navController = host.navController
-        // 現在表示されているfragmentの監視
-        // これは今までの方法
-        host.childFragmentManager.addOnBackStackChangedListener {
-            val drawer = supportFragmentManager.backStackEntryCount == 0
-            host.childFragmentManager.fragments[0]?.let {
-                when (it) {
-                    is HomeFragment -> {
-                        fab.show() // TODO ここと
-                    }
-                    is AddFragment -> {
-                        actionBar?.hide()
-                        actionBar?.let { actionBar ->
-                            actionBar.hide()
-                            Log.i("^v^", "隠されました")
-                        }
-
-                        fab.hide()
-                    }
-                    else -> {
-                        fab.hide()
-                    }
-                }
-                Log.i("^v^", it.toString())
-            }
-        }
-        // navigationControllerでDestinationが変化したときに呼ばれるリスナー
-
+        host = supportFragmentManager
+            .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
 
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
@@ -128,7 +101,29 @@ class MainActivity : AppCompatActivity(),
 
         // 行先にlabelを表示する。←と🍔アイコンを出し分ける
         toolbar.setupWithNavController(navController, appBarConfiguration)
-        nav_view.setupWithNavController(navController)
+//        nav_view.setupWithNavController(navController)　もともとの方法
+        nav_view.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.homeFragment -> {
+                    navController.navigate(R.id.homeFragment)
+                }
+                R.id.profileFragment -> {
+                    navController.navigate(R.id.profileFragment)
+                }
+                R.id.settingsFragment -> {
+                    navController.navigate(R.id.settingsFragment)
+                }
+                R.id.aboutFragment -> {
+                    navController.navigate(R.id.aboutFragment)
+                }
+                R.id.licenseActivity -> {
+                    val intent = Intent(this, OssLicensesMenuActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
 
 
         // Global Actionでの遷移
@@ -143,6 +138,14 @@ class MainActivity : AppCompatActivity(),
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             //            supportActionBar?.title = destination.label
 //            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            when (destination.id) {
+                R.id.homeFragment -> {
+                    fab.show()
+                }
+                else -> {
+                    fab.hide()
+                }
+            }
         }
         // livedataのハンドリング
         viewModel.apply {
@@ -185,6 +188,7 @@ class MainActivity : AppCompatActivity(),
         checkUserAuth()
         viewModel.getServerStatusTask()
         viewModel.refreshAllTodoByRemote()
+        checkFrontFragmet(host)
     }
 
     private fun checkUserAuth() {
@@ -192,7 +196,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        Log.d("TAG", "firebaseAuthWithGoogle:" + acct.id)
 
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null);
         val mAuth = FirebaseAuth.getInstance()
@@ -201,7 +204,6 @@ class MainActivity : AppCompatActivity(),
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     displaySnackBar("ログインに成功しました")
-                    Log.d("TAG", "signInWithCredential:success");
                     viewModel.user.value = mAuth
                     val action = HomeFragmentDirections.actionGlobalHomeFragment()
                     navController.navigate(action)
@@ -209,8 +211,6 @@ class MainActivity : AppCompatActivity(),
                 } else {
                     // If sign in fails, display a message to the user.
                     displaySnackBar("ログインに失敗しました")
-                    Log.w("TAG", "signInWithCredential:failure", task.getException());
-
                 }
                 viewModel.user.value = mAuth
             }
@@ -229,7 +229,6 @@ class MainActivity : AppCompatActivity(),
             } catch (e: ApiException) {
                 displaySnackBar("ログインに失敗しました")
                 // Google Sign In failed, update UI appropriately
-                Log.w("TAG", "Google sign in failed", e);
             }
             drawer_layout.closeDrawers()
         }
@@ -314,20 +313,31 @@ class MainActivity : AppCompatActivity(),
             naviHeaderLogout.visibility = View.INVISIBLE
 
 
-            fab.show()// TODOここが危険
+            fab.visibility = View.VISIBLE
         } else {
             naviHeaderLogin.visibility = View.INVISIBLE
             naviHeaderLogout.visibility = View.VISIBLE
-
-            fab.hide()
+            fab.visibility = View.VISIBLE
         }
     }
 
     private fun makePrefChangeListener(): SharedPreferences.OnSharedPreferenceChangeListener {
         return SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences, key: String ->
-            Log.i("^v^", "呼ばれていなくない？")
             if (key == "periodic_synchronization") {
                 viewModel.periodicSynchronizationPref.value = sharedPreferences.getBoolean(key, false)
+            }
+        }
+    }
+
+    private fun checkFrontFragmet(host: NavHostFragment) {
+        host.childFragmentManager.fragments[0]?.let {
+            when (it) {
+                is HomeFragment -> {
+                    fab.show()
+                }
+                else -> {
+                    fab.hide()
+                }
             }
         }
     }

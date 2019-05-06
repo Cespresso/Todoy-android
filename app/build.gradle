@@ -10,6 +10,8 @@ apply plugin: 'com.google.gms.google-services'
 
 apply plugin: 'androidx.navigation.safeargs'
 
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+
 
 android {
     compileSdkVersion 28
@@ -99,5 +101,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.preference:preference:1.0.0'
+
+    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.2'
 
 }
