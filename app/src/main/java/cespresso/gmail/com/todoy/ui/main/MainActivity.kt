@@ -22,6 +22,7 @@ import androidx.navigation.plusAssign
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import cespresso.gmail.com.todoy.MainNavigationDirections
 import cespresso.gmail.com.todoy.R
 import cespresso.gmail.com.todoy.ui.DialogNavigator
 import cespresso.gmail.com.todoy.ui.Event
@@ -105,16 +106,16 @@ class MainActivity : AppCompatActivity(),
         nav_view.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeFragment -> {
-                    navController.navigate(R.id.homeFragment)
+                    navController.navigate(MainNavigationDirections.actionGlobalHomeFragment())
                 }
                 R.id.profileFragment -> {
-                    navController.navigate(R.id.profileFragment)
+                    navController.navigate(MainNavigationDirections.actionGlobalProfileFragment())
                 }
                 R.id.settingsFragment -> {
-                    navController.navigate(R.id.settingsFragment)
+                    navController.navigate(MainNavigationDirections.actionGlobalSettingsFragment())
                 }
                 R.id.aboutFragment -> {
-                    navController.navigate(R.id.aboutFragment)
+                    navController.navigate(MainNavigationDirections.actionGlobalAboutFragment())
                 }
                 R.id.licenseActivity -> {
                     val intent = Intent(this, OssLicensesMenuActivity::class.java)
