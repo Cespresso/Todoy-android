@@ -1,4 +1,4 @@
-package cespresso.gmail.com.todoy
+package cespresso.gmail.com.todoy.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

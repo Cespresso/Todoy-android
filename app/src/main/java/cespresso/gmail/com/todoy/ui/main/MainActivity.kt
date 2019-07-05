@@ -22,6 +22,9 @@ import androidx.navigation.plusAssign
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import androidx.work.Configuration
+import androidx.work.WorkManager
+import androidx.work.WorkerFactory
 import cespresso.gmail.com.todoy.MainNavigationDirections
 import cespresso.gmail.com.todoy.R
 import cespresso.gmail.com.todoy.ui.DialogNavigator
@@ -56,6 +59,9 @@ class MainActivity : AppCompatActivity(),
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: MainActivityViewModel
 
+    @Inject
+    lateinit var workerFactory: WorkerFactory
+
     lateinit var navController: NavController
     lateinit var sharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
     lateinit var host: NavHostFragment
@@ -65,6 +71,9 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        // workerFactoryの設定
+
 
 
 

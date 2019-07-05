@@ -2,6 +2,7 @@ package cespresso.gmail.com.todoy.di
 
 import android.app.Application
 import cespresso.gmail.com.todoy.MyApplication
+import cespresso.gmail.com.todoy.worker.WorkerModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -13,7 +14,8 @@ import javax.inject.Singleton
     modules = arrayOf(
         AndroidSupportInjectionModule::class,
         AppModule::class,
-        ActivitiesModule::class
+        ActivitiesModule::class,
+        WorkerModule::class
     )
 )
 interface AppComponent : AndroidInjector<MyApplication> {

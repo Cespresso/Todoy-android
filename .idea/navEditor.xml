@@ -20,6 +20,11 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="action_global_aboutFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_addFragment">
                     <value>
                       <LayoutPositions />
@@ -31,6 +36,16 @@
                     </value>
                   </entry>
                   <entry key="action_global_loginFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_profileFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_settingsFragment">
                     <value>
                       <LayoutPositions />
                     </value>
