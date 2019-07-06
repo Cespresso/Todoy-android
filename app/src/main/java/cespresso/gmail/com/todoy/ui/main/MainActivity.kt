@@ -3,6 +3,7 @@ package cespresso.gmail.com.todoy.ui.main
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,13 +23,12 @@ import androidx.navigation.plusAssign
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
-import androidx.work.Configuration
-import androidx.work.WorkManager
-import androidx.work.WorkerFactory
+import androidx.work.*
 import cespresso.gmail.com.todoy.MainNavigationDirections
 import cespresso.gmail.com.todoy.R
 import cespresso.gmail.com.todoy.ui.DialogNavigator
 import cespresso.gmail.com.todoy.ui.Event
+import cespresso.gmail.com.todoy.worker.GetAllTodosWorker
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -44,6 +44,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity(),
     private lateinit var viewModel: MainActivityViewModel
 
     @Inject
-    lateinit var workerFactory: WorkerFactory
+    lateinit var myWorkerFactory: WorkerFactory
 
     lateinit var navController: NavController
     lateinit var sharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
@@ -73,6 +74,19 @@ class MainActivity : AppCompatActivity(),
         setSupportActionBar(toolbar)
 
         // workerFactoryの設定
+
+        val periodicWorkRequest =
+            PeriodicWorkRequest.Builder(GetAllTodosWorker::class.java, 20, TimeUnit.SECONDS).build()
+        WorkManager.getInstance().enqueue(periodicWorkRequest)
+
+        WorkManager.getInstance().getWorkInfoByIdLiveData(periodicWorkRequest.id)
+            .observe(this@MainActivity, Observer { workInfo ->
+                Log.i("^v^","結果が帰ってきてるよ")
+                if((workInfo !=null) && (workInfo.state == WorkInfo.State.ENQUEUED)){
+                    val Data = workInfo.outputData.getString("result")
+                    Log.i("^v^result",Data.toString())
+                }
+            })
 
 
 

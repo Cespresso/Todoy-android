@@ -1,10 +1,12 @@
 package cespresso.gmail.com.todoy.worker
 
 import android.content.Context
-import androidx.work.ListenableWorker
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.work.*
 import cespresso.gmail.com.todoy.data.source.remote.ITodoyApiService
+import cespresso.gmail.com.todoy.ui.main.MainActivityViewModel
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -13,8 +15,14 @@ class GetAllTodosWorker @Inject constructor(
     ctx: Context,
     params: WorkerParameters
 ) : Worker(ctx, params) {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private lateinit var viewModel: MainActivityViewModel
     override fun doWork(): Result {
-        return Result.success()
+        api
+        Log.i("^v^","うい")
+        val outputData: Data = workDataOf("result" to "^v^ti")
+        return Result.success(outputData)
     }
 
     class Factory @Inject constructor(

@@ -21,5 +21,6 @@ class MyApplication : DaggerApplication() {
         super.onCreate()
         applyAutoInjector()
         WorkManager.initialize(this, Configuration.Builder().setWorkerFactory(myWorkerFactory).build())
+
     }
 }

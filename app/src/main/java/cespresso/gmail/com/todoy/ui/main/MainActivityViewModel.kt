@@ -4,13 +4,18 @@ package cespresso.gmail.com.todoy.ui.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import cespresso.gmail.com.todoy.await
 import cespresso.gmail.com.todoy.data.entity.Todo
 import cespresso.gmail.com.todoy.data.source.remote.ITodoyApiService
 import cespresso.gmail.com.todoy.ui.Event
 import cespresso.gmail.com.todoy.ui.TaskState
+import cespresso.gmail.com.todoy.worker.GetAllTodosWorker
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainActivityViewModel @Inject constructor(
@@ -188,6 +193,9 @@ class MainActivityViewModel @Inject constructor(
 
     fun startSynchronizationWorker() {
         makeSnackBarEvent.value = Event("現在この機能は実装されていません")
+        val periodicWorkRequest =
+            PeriodicWorkRequest.Builder(GetAllTodosWorker::class.java, 20, TimeUnit.SECONDS).build()
+        WorkManager.getInstance().enqueue(periodicWorkRequest)
     }
 
     fun stopSynchronizationWorker() {
